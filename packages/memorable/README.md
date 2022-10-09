@@ -1,6 +1,6 @@
 # 🧠 memorable
 
-A tiny lib for memoizing data in node.js applications
+A tiny yet extensible lib for memoizing data in node.js applications
 
 ## development server
 

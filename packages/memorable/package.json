@@ -1,8 +1,11 @@
 {
   "name": "memorable",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "🧠 Memorize and cache data for faster responses",
   "main": "src/index.js",
+  "files": [
+    "src/lib/utils/index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stewones/memorable.git"

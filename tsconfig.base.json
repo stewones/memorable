@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "memorable": ["packages/memorable/src/index.ts"]
+      "memorable": ["packages/memorable/src/index.ts"],
+      "memorable/utils": ["packages/memorable/src/lib/utils/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

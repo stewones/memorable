@@ -179,8 +179,6 @@ export async function memo<T = any>(params?: MemoParams<T>): Promise<Memo<T>> {
     ttl,
   })(Memorable);
 
-  console.log('reconciler', reconciler);
-
   /**
    * meaning we should fetch from network
    */

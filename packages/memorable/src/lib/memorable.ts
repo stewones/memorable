@@ -1,10 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import produce from 'immer';
 
+import { isEmpty } from './utils/isEmpty';
+
+export interface MemorableProtocol {
+  ttl: number; // in miliseconds
+  storage: MemorableStorage;
+  reconciler: MemorableReconciler;
+}
 export interface MemorableParams {
-  ttl?: number;
+  ttl?: number; // in miliseconds
   storage?: MemorableStorage;
   reconciler?: MemorableReconciler;
+}
+
+export interface MemoParams<T = any> {
+  key: string;
+  ttl?: number;
+  fetch: () => Promise<T>;
+}
+
+export interface Memo<T = any> extends Pick<MemoParams<T>, 'key' | 'ttl'> {
+  value: T | null;
+  cache: 'hit' | 'miss';
+  expires: number;
 }
 
 /**
@@ -19,22 +37,20 @@ export abstract class Storage {
 }
 
 export class MemorableStorage implements Storage {
-  state = Object.freeze({} as any);
+  state = {} as any;
 
   get(key: string) {
-    return this.state[key];
+    return Promise.resolve(this.state[key]);
   }
 
   set(key: string, value: any) {
-    return produce(this.state, (draft: any) => {
-      draft[key] = value;
-    });
+    this.state[key] = value;
+    return Promise.resolve();
   }
 
   remove(key: string) {
-    return produce(this.state, (draft: any) => {
-      delete draft[key];
-    });
+    delete this.state[key];
+    return Promise.resolve();
   }
 }
 export class DefaultStorage extends MemorableStorage {
@@ -57,13 +73,57 @@ export class DefaultStorage extends MemorableStorage {
  * @export
  * @class Reconciler
  */
-export abstract class Reconciler {}
+export abstract class Reconciler {
+  abstract shouldFetch<T = any>(
+    memo: MemoParams<T>
+  ): (protocol: MemorableProtocol) => Promise<boolean | Memo>;
+}
 
-export class MemorableReconciler implements Reconciler {}
+export class MemorableReconciler implements Reconciler {
+  /**
+   * Wheter or not we should request the network
+   * but also returns data if we have it in cache
+   */
+  shouldFetch<T = any>(
+    memo: MemoParams<T>
+  ): (protocol: MemorableProtocol) => Promise<boolean | Memo> {
+    return async ({ storage }: { storage: MemorableStorage }) => {
+      const memoFromStorage = await storage.get(memo.key);
+      if (isEmpty(memoFromStorage)) {
+        return Promise.resolve(true);
+      }
 
-export class DefaultReconciler extends MemorableReconciler {}
+      /**
+       * just return the cached memo if it's not expired
+       */
+      const now = new Date().getTime();
+      const expires = memoFromStorage.expires;
+      console.log('now', now);
+      console.log('expires', expires);
 
-const Memorable = {
+      if (now < expires) {
+        return Promise.resolve(memoFromStorage);
+      }
+
+      /**
+       * otherwise, we need to fetch the data from network
+       */
+      return Promise.resolve(true);
+    };
+  }
+}
+
+export class DefaultReconciler extends MemorableReconciler {
+  shouldFetch<T = any>(memo: MemoParams<T>) {
+    return super.shouldFetch(memo);
+  }
+}
+
+/**
+ * Memorable is a main object which holds instances of everything. ie storage, reconciler and more.
+ * it should not be imported in your app, instead use the memorable() to initialize and memo() to consume.
+ */
+export const Memorable: MemorableProtocol = {
   storage: new DefaultStorage(),
   reconciler: new DefaultReconciler(),
   ttl: 10 * 60 * 1000,
@@ -78,9 +138,9 @@ const Memorable = {
  * import { memorable, DefaultStorage, DefaultReconciler } from 'memorable';
  *
  * memorable({
- *  ttl?: 10 * 60 * 1000, // default to 10 minutes
- *  storage?: DefaultStorage, // default to the machine memory
- *  reconciler?: DefaultReconciler // default to strict mode. meaning if data is in cache and satifies the defined TTL, it will be returned and network skipped.
+ *  ttl?: 10 * 60 * 1000, // default to 10 minutes. configurable in runtime at memo() level
+ *  storage?: new DefaultStorage(), // default to the machine memory
+ *  reconciler?: new DefaultReconciler() // default to strict mode. meaning if data is in cache and satifies the defined TTL, it will be returned and network skipped.
  * });
  *
  * @export
@@ -99,7 +159,70 @@ export function memorable(params?: MemorableParams): string {
     Memorable.reconciler = params.reconciler;
   }
 
-  console.log(Memorable);
-
   return '🧠';
+}
+
+export async function memo<T = any>(params?: MemoParams<T>): Promise<Memo<T>> {
+  if (!params?.key) {
+    throw new Error('key is required');
+  }
+
+  if (!params?.fetch) {
+    throw new Error('fetch is required');
+  }
+
+  const key = params.key;
+  const ttl = params.ttl || Memorable.ttl;
+
+  const reconciler: boolean | any = await Memorable.reconciler.shouldFetch({
+    ...params,
+    ttl,
+  })(Memorable);
+
+  console.log('reconciler', reconciler);
+
+  /**
+   * meaning we should fetch from network
+   */
+  if (reconciler === true) {
+    const value = await params.fetch();
+    const expires = new Date().getTime() + ttl;
+
+    // for faster responses we don't want to wait for the storage to finish
+    Memorable.storage.set(key, {
+      key,
+      ttl,
+      value,
+      expires,
+    });
+
+    return Promise.resolve({
+      key,
+      ttl,
+      value,
+      expires,
+      cache: 'miss',
+    });
+  }
+
+  /**
+   * otherwise the reconciler returned the cached Memo
+   */
+  if (reconciler !== false) {
+    return Promise.resolve({
+      ...reconciler,
+      cache: 'hit',
+    });
+  }
+
+  /**
+   * if there's no reconciliation, just return value as null
+   */
+  return Promise.resolve({
+    key,
+    ttl,
+    value: null,
+    expires: 0,
+    cache: 'miss',
+  });
 }

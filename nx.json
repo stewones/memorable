@@ -40,5 +40,5 @@
     "appsDir": "examples",
     "libsDir": "packages"
   },
-  "defaultProject": "express"
+  "defaultProject": "memorable"
 }

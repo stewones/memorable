@@ -52,13 +52,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+          fetch-depth: 0
 
       - name: Extract version from tag
         uses: damienaicheh/extract-version-from-tag-action@v1.0.0
 
-       - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
@@ -84,4 +83,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'memorable.js v{{ $MAJOR }}.{{ $MINOR }}.{{ $PATCH }} has been released 🚀'
+          args: 'memorable.js v${{ $MAJOR }}.${{ $MINOR }}.${{ $PATCH }} has been released 🚀'

@@ -8,6 +8,9 @@ on:
       - '.github/workflows/memorable.yml'
       - 'packages/memorable/**'
 
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

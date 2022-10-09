@@ -74,4 +74,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'memorable.js v${ env.RELEASE_VERSION } has been released 🚀'
+          args: 'memorable.js v${{ env.RELEASE_VERSION }} has been released 🚀'

@@ -22,9 +22,9 @@ import { isEmpty } from 'memorable/utils';
 import { readFileSync, writeFileSync } from 'fs';
 
 /**
- * create a custom storage to use machine's filesystem as storage
- * this is just an example, you can use any storage mechanism you want
- * for example you could implement a RedisStorage adapter
+ * create a custom storage adapter to use machine's filesystem
+ * this is just an example as how you can use any mechanism to persist data
+ * ie: you could implement a RedisStorage adapter based on this example
  */
 class CustomStorage extends MemorableStorage {
   target = {};
@@ -80,7 +80,7 @@ class CustomReconciler extends MemorableReconciler {
     /**
      * otherwise use a custom implementation
      * where we check for data modification
-     * to decide if we should fetch or not
+     * to decide whenever a new fetch is necessary
      */
     return async ({ storage }: { storage: MemorableStorage }) => {
       const memoFromStorage = await storage.get(memo.key);
@@ -106,8 +106,9 @@ class CustomReconciler extends MemorableReconciler {
       /**
        * check for updates
        */
-
-      Promise.resolve(true);
+      setTimeout(() => {
+        Promise.resolve(memoFromStorage);
+      }, 3000);
     };
   }
 }

@@ -1,0 +1,48 @@
+name: memorable
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/memorable/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@v2
+        with:
+          path: './node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('./package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test memorable
+        run: './node_modules/.bin/nx test memorable --production'
+
+      - name: Build memorable
+        run: './node_modules/.bin/nx build memorable --production'
+
+      - name: Bump version
+        run: 'npm version patch && cd ./packages/memorable && npm version patch'
+
+      - name: Publish memorable package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push updates
+        run: 'git push origin master'
+
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'memorable.js has been patched 🧠'

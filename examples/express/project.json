@@ -1,0 +1,60 @@
+{
+  "name": "express",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "examples/express/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/examples/express",
+        "main": "examples/express/src/main.ts",
+        "tsConfig": "examples/express/tsconfig.app.json",
+        "assets": ["examples/express/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "examples/express/src/environments/environment.ts",
+              "with": "examples/express/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "express:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "express:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["examples/express/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/examples/express"],
+      "options": {
+        "jestConfig": "examples/express/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["example"]
+}

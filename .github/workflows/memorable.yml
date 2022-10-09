@@ -29,11 +29,11 @@ jobs:
       - name: Test memorable
         run: './node_modules/.bin/nx test memorable --production'
 
-      - name: Build memorable
-        run: './node_modules/.bin/nx build memorable --production'
-
       - name: Bump version
         run: 'npm version patch && cd ./packages/memorable && npm version patch'
+
+      - name: Build memorable
+        run: './node_modules/.bin/nx build memorable --production'
 
       - name: Publish memorable package
         run: 'cd ./dist/packages/memorable && npm publish'

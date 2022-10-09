@@ -1,11 +1,11 @@
-name: memorable
+name: ci
 
 on:
   push:
     branches:
       - master
     paths:
-      - '.github/workflows/memorable.yml'
+      - '.github/workflows/ci.yml'
       - 'packages/memorable/**'
 
 jobs:
@@ -26,19 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Test memorable
+      - name: Test
         run: './node_modules/.bin/nx test memorable --production'
 
-      - name: Bump version
+      - name: Patch version
         run: 'npm version patch && cd ./packages/memorable && npm version patch'
-
-      - name: Build memorable
-        run: './node_modules/.bin/nx build memorable --production'
-
-      - name: Publish memorable package
-        run: 'cd ./dist/packages/memorable && npm publish'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push updates
         run: 'git push origin master && git push --tags'

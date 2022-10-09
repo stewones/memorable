@@ -1,17 +1,36 @@
 {
   "name": "memorable",
   "version": "0.0.0",
+  "description": "🧠 Memorize and cache data for faster responses",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "./node_modules/.bin/nx build memorable --production",
+    "publish": "npm run build && cd ./dist/packages/memorable && npm publish"
+  },
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
   "devDependencies": {
     "@nrwl/cli": "14.8.3",
+    "@nrwl/eslint-plugin-nx": "14.8.3",
+    "@nrwl/jest": "14.8.3",
     "@nrwl/js": "14.8.3",
+    "@nrwl/linter": "14.8.3",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "14.8.3",
+    "@types/jest": "28.1.1",
+    "@types/node": "16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "eslint": "~8.15.0",
+    "eslint-config-prettier": "8.1.0",
+    "jest": "28.1.1",
+    "jest-environment-jsdom": "28.1.1",
     "nx": "14.8.3",
     "prettier": "^2.6.2",
+    "ts-jest": "28.0.5",
+    "ts-node": "10.9.1",
     "typescript": "~4.8.2"
   }
 }

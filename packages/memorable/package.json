@@ -1,0 +1,22 @@
+{
+  "name": "memorable",
+  "version": "0.0.0",
+  "description": "🧠 Memorize and cache data for faster responses",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stewones/memorable.git"
+  },
+  "keywords": [
+    "node",
+    "cache",
+    "express",
+    "cache"
+  ],
+  "author": "Stewan Silva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stewones/memorable/issues"
+  },
+  "homepage": "https://github.com/stewones/memorable#readme"
+}

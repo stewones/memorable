@@ -54,9 +54,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract version from tag
-        uses: damienaicheh/extract-version-from-tag-action@v1.0.0
-
       - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
@@ -78,9 +75,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - uses: nowsprinting/check-version-format-action@v3
+        id: version
+        with:
+          prefix: 'v'
+
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'memorable.js v${{ $MAJOR }}.${{ $MINOR }}.${{ $PATCH }} has been released 🚀'
+          args: 'memorable.js ${{ steps.version.outputs.full }} has been released 🚀'

@@ -41,7 +41,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push updates
-        run: 'git push origin master'
+        run: 'git push origin master && git push --tags'
 
       - name: Discord notification
         env:

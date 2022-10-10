@@ -83,6 +83,7 @@ export class MemorableReconciler implements Reconciler {
   /**
    * Wheter or not we should request the network
    * but also returns data if we have it in cache
+   * meaning if data is in cache and satifies the defined TTL, it will be returned and network skipped.
    */
   shouldFetch<T = any>(
     memo: MemoParams<T>
@@ -118,8 +119,8 @@ export class DefaultReconciler extends MemorableReconciler {
 }
 
 /**
- * Memorable is a main object which holds instances of everything. ie storage, reconciler and more.
- * it should not be imported in your app, instead use the memorable() to initialize and memo() to consume.
+ * Memorable is a Protocol which abstracts main pieces like storage, reconciler and others for easy extendability
+ * it should not be imported in your app, instead use the memorable() function to pass your custom features and initialize the protocol
  */
 export const Memorable: MemorableProtocol = {
   storage: new DefaultStorage(),
@@ -136,9 +137,9 @@ export const Memorable: MemorableProtocol = {
  * import { memorable, DefaultStorage, DefaultReconciler } from 'memorable';
  *
  * memorable({
- *  ttl?: 10 * 60 * 1000, // default to 10 minutes. configurable in runtime at memo() level
- *  storage?: new DefaultStorage(), // default to the machine memory
- *  reconciler?: new DefaultReconciler() // default to strict mode. meaning if data is in cache and satifies the defined TTL, it will be returned and network skipped.
+ *  ttl?: 10 * 60 * 1000, // optional. default to 10 minutes. -1 to disable cache. also configurable in runtime at memo() level
+ *  storage?: new DefaultStorage(), // optional. default to the machine memory via MemorableStorage
+ *  reconciler?: new DefaultReconciler() // optional. default to strict mode via MemorableReconciler
  * });
  *
  * @export

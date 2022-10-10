@@ -6,20 +6,21 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/stewones/memorable/workflows/ci/badge.svg" />
+  <a href="https://github.com/stewones/memorable/actions" > 
+    <img src="https://github.com/stewones/memorable/workflows/ci/badge.svg" />
+  </a>
   <a href="https://codecov.io/gh/stewones/memorable" > 
     <img src="https://codecov.io/gh/stewones/memorable/branch/master/graph/badge.svg?token=B2SK9D1Y1Z"/> 
   </a>
   <a href="https://www.npmjs.com/package/memorable">
     <img src="https://img.shields.io/npm/l/memorable?style=flat" />
   </a>
-<br>
+  <br>
   <a href="https://www.npmjs.com/package/memorable"><img src="https://img.shields.io/npm/dw/memorable?style=flat" /></a>
   <a href="https://www.npmjs.com/package/memorable"><img src="https://img.shields.io/npm/v/memorable?style=flat" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-1-orange?style=flat" /></a>
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
+  <a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-1-orange?style=flat" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 ## Sponsors

@@ -67,6 +67,9 @@ class CustomStorage extends MemorableStorage {
   }
 }
 
+/**
+ * create a custom reconciler to control fetch logic and returned cache
+ */
 class CustomReconciler extends MemorableReconciler {
   shouldFetch<T = any>(
     memo: MemoParams<T>
@@ -107,7 +110,17 @@ class CustomReconciler extends MemorableReconciler {
       /**
        * always check for updates in case of
        * 1 - ttl is defined and expired
-       * 2 - or ttl is unset
+       * 2 - or ttl is unset (-1)
+       *
+       * but you can tweak this logic as your needs.
+       * basically if you always need to be checking for updates
+       * regardless of cache expiration, just set ttl to -1
+       *
+       * note that in this implementation the Reconciler is aiming for maximum response performance
+       * that means when disabling TTL (-1)
+       * Reconciler will always be checking for updates while delivering what's cached, at same time.
+       * when something changes, Reconciler updates the cache and deliver the updated result on subsequent requests
+       *
        */
       if ((ttl > 0 && expired) || ttl <= 0) {
         // simulate network delay
@@ -132,8 +145,8 @@ class CustomReconciler extends MemorableReconciler {
       }
 
       /**
-       * resolve cached memo anyways for the current request
-       * this is so we can speed up the response time
+       * resolve cached memo anyways
+       * this is so we can speed up the response time for every request
        */
       return Promise.resolve(memoFromStorage);
     };

@@ -5,13 +5,31 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nrwl/web:rollup",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/memorable",
-        "main": "packages/memorable/src/index.ts",
         "tsConfig": "packages/memorable/tsconfig.lib.json",
-        "assets": ["packages/memorable/*.md"]
+        "project": "packages/memorable/package.json",
+        "entryFile": "packages/memorable/src/index.ts",
+        "format": ["esm", "cjs"],
+        "assets": [
+          {
+            "glob": "packages/memorable/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
       }
     },
     "lint": {

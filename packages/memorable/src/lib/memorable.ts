@@ -132,7 +132,9 @@ export const Memorable: MemorableProtocol = {
 /**
  * Initialize Memorable
  *
- * This function should be called only once in your app root to tell Memorable how to store and fetch data
+ * This step is only required if you want to customize Memorable behavior.
+ * the function should be called only once in your app root
+ * 👉 refer to the Express example for more details
  *
  * @example
  * import { memorable, DefaultStorage, DefaultReconciler } from 'memorable';

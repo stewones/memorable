@@ -3,6 +3,7 @@
   "version": "0.0.22",
   "description": "🧠 Memorize and cache data for faster responses",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "files": [
     "src/lib/utils/index.js"
   ],

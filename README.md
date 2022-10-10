@@ -1,3 +1,5 @@
+<br />
+<br />
 <p align="center"><strong>🧠 memorable</strong></p>
 <p align="center">
   A tiny extensible lib for memoizing data in javascript applications

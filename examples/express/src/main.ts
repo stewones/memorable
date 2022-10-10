@@ -116,10 +116,10 @@ class CustomReconciler extends MemorableReconciler {
        * basically if you always need to be checking for updates
        * regardless of cache expiration, just set ttl to -1
        *
-       * note that in this implementation the Reconciler is aiming for maximum response performance
+       * note that in this example the Reconciler is aiming for maximum response performance
        * that means when disabling TTL (-1)
        * Reconciler will always be checking for updates while delivering what's cached, at same time.
-       * when something changes, Reconciler updates the cache and deliver the updated result on subsequent requests
+       * when something changes, Reconciler updates the cache and deliver the updated result for subsequent requests
        *
        */
       if ((ttl > 0 && expired) || ttl <= 0) {
@@ -179,11 +179,7 @@ async function timeExpensiveComputation() {
 
 /**
  * another time expensive computation
- * now we don't only rely on the ttl
- * but also if data has changed
- * to decide whether to do a new fetch or not
- *
- * 👉 refer to the CustomReconciler class above
+ * 👉 refer to the CustomReconciler class above to learn more
  */
 async function anotherTimeExpensiveComputation() {
   const anotherComputationResult = await memo<string>({

@@ -7,7 +7,9 @@
 
 <p align="center">
   <img src="https://github.com/stewones/memorable/workflows/ci/badge.svg" />
-  <img src="https://img.shields.io/maintenance/yes/2022?style=flat" />  
+  <a href="https://codecov.io/gh/stewones/memorable" > 
+    <img src="https://codecov.io/gh/stewones/memorable/branch/master/graph/badge.svg?token=B2SK9D1Y1Z"/> 
+  </a>
   <a href="https://www.npmjs.com/package/memorable">
     <img src="https://img.shields.io/npm/l/memorable?style=flat" />
   </a>

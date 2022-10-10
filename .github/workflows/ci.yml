@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   # persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-        #   fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+        with:
+          # persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
       - uses: fregante/setup-git-user@v1
 
@@ -35,7 +35,7 @@ jobs:
         run: './node_modules/.bin/nx test memorable --production'
 
       - name: Patch version
-        run: 'cd ./packages/memorable && npm version patch'
+        run: 'npm version patch && cd ./packages/memorable && npm version patch'
 
       - name: Push updates
         run: 'git push origin master && git push --tags'
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   # persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-        #   fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+        with:
+          # persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
       - uses: actions/setup-node@v3
         with:

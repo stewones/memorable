@@ -1,6 +1,6 @@
 {
   "name": "memorable",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "🧠 Memorize and cache data for faster responses",
   "license": "MIT",
   "scripts": {

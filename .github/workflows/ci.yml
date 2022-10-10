@@ -35,7 +35,7 @@ jobs:
         run: './node_modules/.bin/nx test memorable --production'
 
       - name: Patch version
-        run: 'cd ./packages/memorable && npm version patch --git-tag-version=false && cd ../../ && npm version patch'
+        run: 'cd ./packages/memorable && npm version patch --git-tag-version=false && cd ../../ && git add . && git commit -am "🚀" && npm version patch'
 
       - name: Push updates
         run: 'git push origin master && git push --tags'

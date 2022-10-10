@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "files": [
-    "src/lib/utils/index.js"
+    "src"
   ],
   "repository": {
     "type": "git",

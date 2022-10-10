@@ -1,6 +1,40 @@
-# 🧠 memorable
+<h2 align="center">🧠</h2>
+<p align="center"><strong><code>memorable</code></strong></p>
+<p align="center">
+  A tiny yet extensible lib for memoizing data in node.js applications
+</p>
 
-A tiny yet extensible lib for memoizing data in node.js applications
+<p align="center">
+  <img src="https://github.com/stewones/memorable/workflows/ci/badge.svg" />
+  <img src="https://img.shields.io/maintenance/yes/2022?style=flat" />  
+  <a href="https://www.npmjs.com/package/memorable">
+    <img src="https://img.shields.io/npm/l/memorable?style=flat" />
+  </a>
+<br>
+  <a href="https://www.npmjs.com/package/memorable"><img src="https://img.shields.io/npm/dw/memorable?style=flat" /></a>
+  <a href="https://www.npmjs.com/package/memorable"><img src="https://img.shields.io/npm/v/memorable?style=flat" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-1-orange?style=flat" /></a>
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+</p>
+
+## Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://intenseloop.com">
+      <img src="https://static.intenseloop.com/assets/icon-512.png" width="40" />
+      </a>
+    </td>
+    <td>
+      <a href="https://intenseloop.com">
+      Intenseloop
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## development server
 

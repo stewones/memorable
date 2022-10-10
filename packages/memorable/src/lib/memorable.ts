@@ -84,6 +84,7 @@ export class MemorableReconciler implements Reconciler {
    * Wheter or not we should request the network
    * but also returns data if we have it in cache
    * meaning if data is in cache and satifies the defined TTL, it will be returned and network skipped.
+   * this is what we call "Strict TTL" mode
    */
   shouldFetch<T = any>(
     memo: MemoParams<T>
@@ -119,7 +120,7 @@ export class DefaultReconciler extends MemorableReconciler {
 }
 
 /**
- * Memorable is a Protocol which abstracts main pieces like storage, reconciler and others for easy extendability
+ * Memorable is a Protocol which abstracts main pieces like storage, reconciler and others for easy extensibility
  * it should not be imported in your app, instead use the memorable() function to pass your custom features and initialize the protocol
  */
 export const Memorable: MemorableProtocol = {

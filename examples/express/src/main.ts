@@ -110,6 +110,7 @@ class CustomReconciler extends MemorableReconciler {
        * 2 - or ttl is unset
        */
       if ((ttl > 0 && expired) || ttl <= 0) {
+        // simulate network delay
         setTimeout(async () => {
           const value = await memo.fetch();
           const expires = new Date().getTime() + memo.ttl;

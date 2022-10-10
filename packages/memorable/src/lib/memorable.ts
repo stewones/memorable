@@ -98,8 +98,6 @@ export class MemorableReconciler implements Reconciler {
        */
       const now = new Date().getTime();
       const expires = memoFromStorage.expires;
-      console.log('now', now);
-      console.log('expires', expires);
 
       if (now < expires) {
         return Promise.resolve(memoFromStorage);
@@ -190,26 +188,26 @@ export async function memo<T = any>(params?: MemoParams<T>): Promise<Memo<T>> {
     Memorable.storage.set(key, {
       key,
       ttl,
-      value,
       expires,
+      value,
     });
 
     return Promise.resolve({
+      cache: 'miss',
       key,
       ttl,
-      value,
       expires,
-      cache: 'miss',
+      value,
     });
   }
 
   /**
    * otherwise the reconciler returned the cached Memo
    */
-  if (reconciler !== false) {
+  if (!isEmpty(reconciler)) {
     return Promise.resolve({
-      ...reconciler,
       cache: 'hit',
+      ...reconciler,
     });
   }
 
@@ -217,10 +215,10 @@ export async function memo<T = any>(params?: MemoParams<T>): Promise<Memo<T>> {
    * if there's no reconciliation, just return value as null
    */
   return Promise.resolve({
+    cache: 'miss',
     key,
     ttl,
-    value: null,
     expires: 0,
-    cache: 'miss',
+    value: null,
   });
 }

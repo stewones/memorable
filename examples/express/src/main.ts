@@ -20,6 +20,7 @@ import {
 } from 'memorable';
 import { isEmpty } from 'memorable/utils';
 import { readFileSync, writeFileSync } from 'fs';
+import { isDiff } from './effects/isDiff';
 
 /**
  * create a custom storage adapter to use machine's filesystem
@@ -70,53 +71,78 @@ class CustomReconciler extends MemorableReconciler {
   shouldFetch<T = any>(
     memo: MemoParams<T>
   ): (protocol: MemorableProtocol) => Promise<boolean | Memo> {
+    const { key, ttl } = memo;
     /**
-     * use the default implementation for a given key
+     * skip the custom implementation which follows
      */
-    if (memo.key === 'my-computation-result') {
+    if (key === 'my-computation-result') {
       return super.shouldFetch(memo);
     }
 
     /**
      * otherwise use a custom implementation
      * where we check for data modification
-     * to decide whenever a new fetch is necessary
      */
-    return async ({ storage }: { storage: MemorableStorage }) => {
+    return async (protocol) => {
+      const { storage } = protocol;
+
       const memoFromStorage = await storage.get(memo.key);
 
+      /**
+       * ask the protocol to fetch the data and skip the rest
+       */
       if (isEmpty(memoFromStorage)) {
         return Promise.resolve(true);
       }
 
-      /**
-       * resolve cached memo but also request the network
-       * to check for data modification and update the cache
-       */
       const now = new Date().getTime();
       const expires = memoFromStorage.expires;
+      const expired = now > expires;
 
       console.log('now', now);
       console.log('expires', expires);
+      console.log('ttl', ttl);
+      console.log('expired', expired);
 
-      if (now < expires) {
-        Promise.resolve(memoFromStorage);
+      /**
+       * always check for updates in case of
+       * 1 - ttl is defined and expired
+       * 2 - or ttl is unset
+       */
+      if ((ttl > 0 && expired) || ttl <= 0) {
+        setTimeout(async () => {
+          const value = await memo.fetch();
+          const expires = new Date().getTime() + memo.ttl;
+
+          const { key, ttl } = memo;
+
+          if (isDiff(memoFromStorage.value, value)) {
+            console.log('value changed', memoFromStorage.value, value);
+            storage.set(memo.key, {
+              key,
+              ttl,
+              expires,
+              value,
+            });
+          } else {
+            console.log('value not changed', memoFromStorage.value, value);
+          }
+        }, 2000);
       }
 
       /**
-       * check for updates
+       * resolve cached memo anyways for the current request
+       * this is so we can speed up the response time
        */
-      setTimeout(() => {
-        Promise.resolve(memoFromStorage);
-      }, 3000);
+      return Promise.resolve(memoFromStorage);
     };
   }
 }
 
 memorable({
-  storage: new CustomStorage(),
-  reconciler: new CustomReconciler(),
-  ttl: 5 * 1000, // default to 5 seconds. -1 to disable cache.
+  ttl: 10 * 1000, // optional. default to 10 seconds. -1 to disable cache.
+  storage: new CustomStorage(), // optional. defaults to MemorableStorage
+  reconciler: new CustomReconciler(), // optional. defaults to MemorableReconciler
 });
 
 /**
@@ -141,8 +167,9 @@ async function timeExpensiveComputation() {
  * another time expensive computation
  * now we don't only rely on the ttl
  * but also if data has changed
- * to decide if we should fetch or not
- * check the CustomReconciler class above
+ * to decide whether to do a new fetch or not
+ *
+ * 👉 refer to the CustomReconciler class above
  */
 async function anotherTimeExpensiveComputation() {
   const anotherComputationResult = await memo<string>({
@@ -150,7 +177,9 @@ async function anotherTimeExpensiveComputation() {
     fetch: async () => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve('Done 🧠⚡');
+          resolve(
+            `Done ${Math.floor(Math.random() * 100) % 2 === 0 ? '🧠' : '⚡'}`
+          );
         }, 1000);
       });
     },

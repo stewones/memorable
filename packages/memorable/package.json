@@ -1,6 +1,6 @@
 {
   "name": "memorable",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "🧠 Memorize and cache data for faster responses",
   "main": "src/index.js",
   "types": "src/index.d.ts",

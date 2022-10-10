@@ -32,10 +32,25 @@ jobs:
         run: npm install
 
       - name: Test
-        run: './node_modules/.bin/nx test memorable --production'
+        run: './node_modules/.bin/nx test memorable --production --code-coverage --coverageReporters=json'
 
-      - name: Patch version
-        run: 'cd ./packages/memorable && npm version patch --git-tag-version=false && cd ../../ && git add . && git commit -am "📦" && npm version patch'
+      - uses: codecov/codecov-action@v3
+        with:
+          # token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./coverage/packages/memorable/coverage-final.json # optional
+          flags: ci # optional
+          name: memorable # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
+
+      - name: Patch memorable lib version
+        run: 'cd ./packages/memorable && npm version patch --git-tag-version=false'
+
+      - name: Copy README
+        run: 'copy -rf ./README.md ./packages/memorable/README.md'
+
+      - name: Commit changes & patch monorepo version
+        run: 'git add . && git commit -am "📦" && npm version patch'
 
       - name: Push updates
         run: 'git push origin master && git push --tags'

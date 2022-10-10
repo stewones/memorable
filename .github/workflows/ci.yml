@@ -47,7 +47,7 @@ jobs:
         run: 'cd ./packages/memorable && npm version patch --git-tag-version=false'
 
       - name: Copy README
-        run: 'copy -rf ./README.md ./packages/memorable/README.md'
+        run: 'cp -rf ./README.md ./packages/memorable/README.md'
 
       - name: Commit changes & patch monorepo version
         run: 'git add . && git commit -am "📦" && npm version patch'

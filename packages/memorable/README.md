@@ -1,7 +1,8 @@
-<p align="center" style="font-size: 32px; margin-bottom: 0px">🧠</p>
-<p align="center"><strong><code>memorable</code></strong></p>
+<br />
+<br />
+<p align="center"><strong>🧠 memorable</strong></p>
 <p align="center">
-  A tiny extensible lib for memoizing data in node.js applications
+  A tiny extensible lib for memoizing data in javascript applications
 </p>
 
 <p align="center">

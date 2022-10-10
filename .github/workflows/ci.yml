@@ -87,8 +87,8 @@ jobs:
       - name: Build memorable
         run: './node_modules/.bin/nx build memorable --production'
 
-      - name: Copy updated package
-        run: 'cp -rf ./packages/memorable/package.json ./dist/packages/memorable/package.json'
+      # - name: Copy updated package
+      #   run: 'cp -rf ./packages/memorable/package.json ./dist/packages/memorable/package.json'
 
       - name: Publish memorable package
         run: 'cd ./dist/packages/memorable && npm publish'
